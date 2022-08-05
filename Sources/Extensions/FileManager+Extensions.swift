@@ -11,13 +11,9 @@ import Foundation
 extension FileManager {
     
     func subDirectories(forPath path: URL) -> [URL] {
-        if #available(macOS 10.11, *) {
-            guard path.hasDirectoryPath else { return [] }
-            let all = try! self.contentsOfDirectory(at: path, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
-            return all.filter(\.hasDirectoryPath)
-        }
-        
-        return []
+        guard path.hasDirectoryPath else { return [] }
+        let all = try! self.contentsOfDirectory(at: path, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
+        return all.filter(\.hasDirectoryPath)
     }
     
     func filesURL(atPath path: URL, withExtension extension: String) -> [URL] {
