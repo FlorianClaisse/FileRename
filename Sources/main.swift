@@ -10,11 +10,20 @@ let subDirectorys = FileManager.default.subDirectories(forPath: URL(fileURLWithP
 
 for subDirectory in subDirectorys {
     let subDirName = subDirectory.lastPathComponent
-    let dirFiles = FileManager.default.filesURL(atPath: subDirectory, withExtension: options.type)
+    var dirFiles: [URL]
+    if let name = options.name {
+        dirFiles = FileManager.default.filesURL(atPath: subDirectory, withExtension: options.type).filter { $0.lastPathComponent == name + "." + options.type }
+    } else {
+        dirFiles = FileManager.default.filesURL(atPath: subDirectory, withExtension: options.type)
+    }
     
     if dirFiles.isEmpty { fatalError("Un dossier ne contient pas de fichier avec l'extension \(options.type)") }
     
     let newLocation = URL(fileURLWithPath: options.input).appendingPathComponent(subDirName + "." + dirFiles.first!.pathExtension)
     
-    try! FileManager.default.moveItem(at: dirFiles.first!, to: newLocation)
+    do {
+        try FileManager.default.copyItem(at: dirFiles.first!, to: newLocation)
+    } catch {
+        print(error.localizedDescription)
+    }
 }

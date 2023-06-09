@@ -14,4 +14,7 @@ struct Arguments: ParsableCommand {
     
     @Option(help: "Extension des fichiers à trouver et à renommer")
     var type: String
+    
+    @Option(help: "The name of the file to find.")
+    var name: String?
 }
